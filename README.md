@@ -9,8 +9,6 @@ This repository contains my 3-tier application deployment project on AWS. As a f
 
 ## AWS Services Used
 
-- **Amazon S3:** Hosted static frontend assets for high availability and durability.
-- **Amazon CloudFront:** Delivered frontend content globally with low latency and improved performance.
 - **Amazon EC2:** Deployed backend application servers using Auto Scaling Groups for scalability and reliability.
 - **Amazon RDS:** Managed relational database for secure and scalable data storage.
 - **Amazon VPC:** Created isolated network environments for secure communication between tiers.
@@ -19,9 +17,9 @@ This repository contains my 3-tier application deployment project on AWS. As a f
 - **Amazon IAM:** Managed access and permissions for AWS resources.
 - **Custom AMI:** Built and used a custom Amazon Machine Image with all required backend code and dependencies, eliminating the need for a NAT Gateway.
 
-## Optimizations
+## Cost Optimizations
 
-- **Frontend Optimization:** Used S3 and CloudFront to host and deliver static assets, reducing costs and improving performance.
+- **Frontend Hosting:** For further cost optimization and performance, the frontend can be hosted using Amazon S3 and delivered via CloudFront CDN. This approach eliminates server maintenance and reduces costs compared to EC2-based hosting.
 - **Backend Optimization:** Removed the NAT Gateway to save costs and enhance security. Instead, I created a custom AMI/template with all necessary packages and code, allowing backend instances to launch without internet access.
 - **Monitoring & Alerts:** Integrated CloudWatch to monitor resource utilization and application health. Set up alarms to send email notifications for events such as high CPU usage or instance failures, ensuring proactive management.
 
@@ -30,7 +28,7 @@ This repository contains my 3-tier application deployment project on AWS. As a f
 During the deployment of this 3-tier architecture, I encountered several challenges, especially with connectivity between the frontend, backend, and database layers. The main issues were related to misconfigured Security Groups and Network ACLs (NACLs), which blocked communication between the tiers.
 
 - **Frontend to Backend Connectivity:**  
-  Initially, the frontend (hosted on S3 + CloudFront) could not reach the backend EC2 instances due to restrictive inbound rules in the backend's Security Group. I resolved this by updating the Security Group to allow HTTP/HTTPS traffic from CloudFront’s IP ranges.
+  Initially, the frontend (hosted on an EC2 instance) could not reach the backend EC2 instances due to restrictive inbound rules in the backend's Security Group. I resolved this by updating the Security Group to allow HTTP/HTTPS traffic from the frontend instance's IP or subnet.
 
 - **Backend to Database Connectivity:**  
   The backend EC2 instances were unable to connect to the Amazon RDS database. This was caused by missing inbound rules in the RDS Security Group and overly restrictive NACLs. I fixed this by:
